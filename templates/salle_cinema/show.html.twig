@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SalleCinema{% endblock %}
+
+{% block body %}
+    <h1>SalleCinema</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>IdSalle</th>
+                <td>{{ salle_cinema.idSalle }}</td>
+            </tr>
+            <tr>
+                <th>NomSalle</th>
+                <td>{{ salle_cinema.nomSalle }}</td>
+            </tr>
+            <tr>
+                <th>UrlFilm</th>
+                <td>{{ salle_cinema.urlFilm }}</td>
+            </tr>
+            <tr>
+                <th>UrlSalle</th>
+                <td>{{ salle_cinema.urlSalle }}</td>
+            </tr>
+            <tr>
+                <th>Chat</th>
+                <td>{{ salle_cinema.chat }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_salle_cinema_index') }}">back to list</a>
+
+    <a href="{{ path('app_salle_cinema_edit', {'idSalle': salle_cinema.idSalle}) }}">edit</a>
+
+    {{ include('salle_cinema/_delete_form.html.twig') }}
+{% endblock %}

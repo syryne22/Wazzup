@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SalleCinema index{% endblock %}
+
+{% block body %}
+    <h1>SalleCinema index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdSalle</th>
+                <th>NomSalle</th>
+                <th>UrlFilm</th>
+                <th>UrlSalle</th>
+                <th>Chat</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for salle_cinema in salle_cinemas %}
+            <tr>
+                <td>{{ salle_cinema.idSalle }}</td>
+                <td>{{ salle_cinema.nomSalle }}</td>
+                <td>{{ salle_cinema.urlFilm }}</td>
+                <td>{{ salle_cinema.urlSalle }}</td>
+                <td>{{ salle_cinema.chat }}</td>
+                <td>
+                    <a href="{{ path('app_salle_cinema_show', {'idSalle': salle_cinema.idSalle}) }}">show</a>
+                    <a href="{{ path('app_salle_cinema_edit', {'idSalle': salle_cinema.idSalle}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_salle_cinema_new') }}">Create new</a>
+{% endblock %}
