@@ -9,7 +9,7 @@
         <tbody>
             <tr>
                 <th>IdRen</th>
-                <td>{{ rencontre.idRen }}</td>
+                <td>{{ rencontre.id }}</td>
             </tr>
             <tr>
                 <th>TypeRencontre</th>
@@ -24,7 +24,7 @@
 
     <a href="{{ path('app_rencontre_index') }}">back to list</a>
 
-    <a href="{{ path('app_rencontre_edit', {'idRen': rencontre.idRen}) }}">edit</a>
+    <a href="{{ path('app_rencontre_edit', {'id': rencontre.id}) }}">edit</a>
 
     {{ include('rencontre/_delete_form.html.twig') }}
 {% endblock %}

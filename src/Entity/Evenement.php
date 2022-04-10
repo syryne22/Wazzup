@@ -67,9 +67,14 @@ class Evenement
      */
     private $dateP;
     /**
-     * @ORM\OneToMany(targetEntity=Rencontre::class, mappedBy="evenement", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Rencontre", mappedBy="evenement")
      */
     private $rencontres;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SalleCinema",mappedBy="evenement")
+     */
+    private $salleCinema;
 
     /**
      * @var \Utilisateurs
@@ -180,8 +185,10 @@ class Evenement
     public function __construct()
     {
         $this->rencontres=new ArrayCollection();
+        $this->salleCinema=new ArrayCollection();
     }
-    public function getRencontres(){
+    public function getRencontres(): Collection
+    {
         return $this->rencontres;
     }
     public function removeRencontre(Rencontre $rencontre){
@@ -193,6 +200,22 @@ class Evenement
     }
     public function addRencontre(Rencontre $rencontre){
         $this->rencontres[]=$rencontre;
+        return $this;
+    }
+
+    public function getSallesCinema(): Collection
+    {
+        return $this->salleCinema;
+    }
+    public function removeSalleCinema(SalleCinema $salleCinema){
+        if($this->salleCinema->removeElement($salleCinema)){
+             if($salleCinema->getIdEvent()===$this){
+                 $salleCinema->setIdEvent(null);
+             }
+        }
+    }
+    public function addSalleCinema(Rencontre $salleCinema){
+        $this->salleCinema[]=$salleCinema;
         return $this;
     }
     public function getId(): ?int

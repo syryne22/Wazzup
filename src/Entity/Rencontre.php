@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity; 
 use App\Repository\RencontreRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Rencontre
  *
- * @ORM\Table(name="rencontre", indexes={@ORM\Index(name="rencontre_event", columns={"ID_Event"})})
+ * @ORM\Table(name="rencontre")
  * @ORM\Entity(repositoryClass=RencontreRepository::class)
  */
 class Rencontre
@@ -31,14 +31,26 @@ class Rencontre
      *
      * @ORM\Column(name="URL_Invitation", type="string", length=50, nullable=false)
      */
-    private $urlInvitation;
+    private $urlInvitation; 
 
     /**
-     * @var \Evenement
-     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Evenement", inversedBy="rencontres")
+     * @ORM\JoinColumn(name="ID_Event", referencedColumnName="ID_Event")
      */
-    private $idEvent;
+    private $ID_Event;
+
+    public function getEvenement(): ?Evenement
+    {
+        return $this->ID_Event;
+    }
+
+    public function setEvenement(?Evenement $evenement): self
+    {
+        $this->ID_Event = $evenement;
+
+        return $this;
+    }
+
 
     public function getId(): ?int
     {
@@ -68,16 +80,5 @@ class Rencontre
 
         return $this;
     }
-
-    public function getIdEvent(): ?Evenement
-    {
-        return $this->idEvent;
-    }
-
-    public function setIdEvent(?Evenement $idEvent): self
-    {
-        $this->idEvent = $idEvent;
-
-        return $this;
-    }
+ 
 }

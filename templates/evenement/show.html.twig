@@ -9,7 +9,7 @@
         <tbody>
             <tr>
                 <th>IdEvent</th>
-                <td>{{ evenement.idEvent }}</td>
+                <td>{{ evenement.id }}</td>
             </tr>
             <tr>
                 <th>NomEvent</th>
@@ -43,8 +43,6 @@
     </table>
 
     <a href="{{ path('app_evenement_index') }}">back to list</a>
-
-    <a href="{{ path('app_evenement_edit', {'idEvent': evenement.idEvent}) }}">edit</a>
-
+    <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}">edit</a>
     {{ include('evenement/_delete_form.html.twig') }}
 {% endblock %}

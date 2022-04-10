@@ -50,14 +50,10 @@ class SalleCinema
     private $chat;
 
     /**
-     * @var \Evenement
-     *
-     * @ORM\ManyToOne(targetEntity="Evenement")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_Event", referencedColumnName="ID_Event")
-     * })
+     * @ORM\ManyToOne(targetEntity="App\Entity\Evenement", inversedBy="sallescinema")
+     * @ORM\JoinColumn(name="ID_Event", referencedColumnName="ID_Event")
      */
-    private $idEvent;
+    private $ID_Event;
 
     public function getIdSalle(): ?int
     {
@@ -114,12 +110,12 @@ class SalleCinema
 
     public function getIdEvent(): ?Evenement
     {
-        return $this->idEvent;
+        return $this->ID_Event;
     }
 
     public function setIdEvent(?Evenement $idEvent): self
     {
-        $this->idEvent = $idEvent;
+        $this->ID_Event = $idEvent;
 
         return $this;
     }

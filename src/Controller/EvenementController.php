@@ -3,6 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Evenement;
+use App\Entity\Rencontre;
+use App\Entity\SalleCinema;
+use App\Entity\Utilisateurs;
 use App\Form\EvenementType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,13 +19,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class EvenementController extends AbstractController
 {
     /**
-     * @Route("/", name="app_evenement_index", methods={"GET"})
+     * @Route("/list/{user}", name="app_evenement_index", methods={"GET"})
      */
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, Utilisateurs $user): Response
     {
         $evenements = $entityManager
             ->getRepository(Evenement::class)
-            ->findAll();
+            ->findby([
+                'idUtilisateur'=> $user->getIdUtilisateur()
+            ]);
 
         return $this->render('evenement/index.html.twig', [
             'evenements' => $evenements,
@@ -40,9 +45,12 @@ class EvenementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($evenement);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
+            $entityManager->flush(); 
+            if($evenement->getTypeEvent()=="Rencontre")
+            return $this->redirectToRoute('app_rencontre_new', ['evenement'=>$evenement->getId(),'user'=>58], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_salle_cinema_new', ['evenement'=>$evenement->getId(),'user'=>58
+            //$this->getUser()->getId()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('evenement/new.html.twig', [
@@ -52,12 +60,14 @@ class EvenementController extends AbstractController
     }
 
     /**
-     * @Route("/{idEvent}", name="app_evenement_show", methods={"GET"})
+     * @Route("/{id}", name="app_evenement_show", methods={"GET"})
      */
     public function show(Evenement $evenement): Response
     {
+
         return $this->render('evenement/show.html.twig', [
             'evenement' => $evenement,
+
         ]);
     }
 

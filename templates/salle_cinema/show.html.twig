@@ -30,7 +30,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_salle_cinema_index') }}">back to list</a>
+    <a href="{{ path('app_salle_cinema_index',{'event': event}) }}">back to list</a>
 
     <a href="{{ path('app_salle_cinema_edit', {'idSalle': salle_cinema.idSalle}) }}">edit</a>
 

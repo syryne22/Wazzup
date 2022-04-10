@@ -17,12 +17,12 @@
         <tbody>
         {% for rencontre in rencontres %}
             <tr>
-                <td>{{ rencontre.idRen }}</td>
+                <td>{{ rencontre.id }}</td>
                 <td>{{ rencontre.typeRencontre }}</td>
                 <td>{{ rencontre.urlInvitation }}</td>
                 <td>
-                    <a href="{{ path('app_rencontre_show', {'idRen': rencontre.idRen}) }}">show</a>
-                    <a href="{{ path('app_rencontre_edit', {'idRen': rencontre.idRen}) }}">edit</a>
+                    <a href="{{ path('app_rencontre_show', {'id': rencontre.id}) }}">show</a>
+                    <a href="{{ path('app_rencontre_edit', {'id': rencontre.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -32,6 +32,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_rencontre_new') }}">Create new</a>
 {% endblock %}

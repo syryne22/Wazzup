@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Rencontre;
+use App\Entity\Evenement;
 use App\Form\RencontreType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,11 +23,10 @@ class RencontreController extends AbstractController
     {
         $rencontres = $entityManager
             ->getRepository(Rencontre::class)
-            ->findAll();
-
-        return $this->render('rencontre/index.html.twig', [
+            ->findAll(); 
+         return $this->render('rencontre/index.html.twig', [
             'rencontres' => $rencontres,
-        ]);
+        ]); 
     }
 
     /**
@@ -35,6 +35,11 @@ class RencontreController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $rencontre = new Rencontre();
+
+        $event=$entityManager->getRepository(Evenement::class)->find($request->query->get('evenement'));
+        $rencontre->setEvenement($event);
+        $rencontre->setUrlInvitation("");
+
         $form = $this->createForm(RencontreType::class, $rencontre);
         $form->handleRequest($request);
 
@@ -42,7 +47,9 @@ class RencontreController extends AbstractController
             $entityManager->persist($rencontre);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_rencontre_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_evenement_index', ['user'=>58
+            //$this->getUser()->getId()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('rencontre/new.html.twig', [
@@ -52,7 +59,7 @@ class RencontreController extends AbstractController
     }
 
     /**
-     * @Route("/{idRen}", name="app_rencontre_show", methods={"GET"})
+     * @Route("/{id}", name="app_rencontre_show", methods={"GET"})
      */
     public function show(Rencontre $rencontre): Response
     {
@@ -82,7 +89,7 @@ class RencontreController extends AbstractController
     }
 
     /**
-     * @Route("/{idRen}", name="app_rencontre_delete", methods={"POST"})
+     * @Route("/{id}", name="app_rencontre_delete", methods={"POST"})
      */
     public function delete(Request $request, Rencontre $rencontre, EntityManagerInterface $entityManager): Response
     {

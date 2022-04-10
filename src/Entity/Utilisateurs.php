@@ -89,7 +89,7 @@ class Utilisateurs
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="passwordRequestedAt", type="datetime", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="passwordRequestedAt", type="date", nullable=true)
      */
     private $passwordrequestedat = 'NULL';
 
@@ -138,7 +138,7 @@ class Utilisateurs
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false, options={"default"="current_timestamp()"})
+     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
     private $creationDate = 'current_timestamp()';
 
@@ -147,7 +147,7 @@ class Utilisateurs
      */
     public function __construct()
     {
-        $this->idCollab = new \Doctrine\Common\Collections\ArrayCollection();
+        
     }
 
     public function getIdUtilisateur(): ?int
@@ -263,12 +263,12 @@ class Utilisateurs
         return $this;
     }
 
-    public function getPasswordrequestedat(): ?\DateTimeInterface
+    public function getPasswordrequestedat() 
     {
         return $this->passwordrequestedat;
     }
 
-    public function setPasswordrequestedat(?\DateTimeInterface $passwordrequestedat): self
+    public function setPasswordrequestedat($passwordrequestedat): self
     {
         $this->passwordrequestedat = $passwordrequestedat;
 
