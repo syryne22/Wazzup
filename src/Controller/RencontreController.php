@@ -82,7 +82,7 @@ class RencontreController extends AbstractController
 
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_rencontre_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_evenement_index', ['user'=>58], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('rencontre/edit.html.twig', [

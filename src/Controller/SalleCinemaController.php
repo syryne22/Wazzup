@@ -81,7 +81,7 @@ class SalleCinemaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_salle_cinema_index', ['event'=>$salleCinema->getIdEvent()->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_evenement_index', ['user'=>58], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('salle_cinema/edit.html.twig', [
@@ -92,15 +92,19 @@ class SalleCinemaController extends AbstractController
     }
 
     /**
-     * @Route("/{idSalle}", name="app_salle_cinema_delete", methods={"POST"})
+     * @Route("/delete/{idSalle}", name="app_salle_cinema_delete", methods={"POST"})
      */
     public function delete(Request $request, SalleCinema $salleCinema, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$salleCinema->getIdSalle(), $request->request->get('_token'))) {
+            $event=$salleCinema->getIdEvent();
+            $entityManager->remove($event);
             $entityManager->remove($salleCinema);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_salle_cinema_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_evenement_index', ['user'=>58
+        //$this->getUser()->getId()
+        ], Response::HTTP_SEE_OTHER);
     }
 }
