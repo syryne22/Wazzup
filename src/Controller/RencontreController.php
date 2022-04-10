@@ -17,15 +17,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class RencontreController extends AbstractController
 {
     /**
-     * @Route("/", name="app_rencontre_index", methods={"GET"})
+     * @Route("/list/{event}", name="app_rencontre_index", methods={"GET"})
      */
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager,Evenement $event): Response
     {
         $rencontres = $entityManager
             ->getRepository(Rencontre::class)
-            ->findAll(); 
+            ->findBy(['ID_Event'=>$event
+            ]);
          return $this->render('rencontre/index.html.twig', [
             'rencontres' => $rencontres,
+             'event' => $event->getId()
         ]); 
     }
 
@@ -77,6 +79,7 @@ class RencontreController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_rencontre_index', [], Response::HTTP_SEE_OTHER);
@@ -85,6 +88,7 @@ class RencontreController extends AbstractController
         return $this->render('rencontre/edit.html.twig', [
             'rencontre' => $rencontre,
             'form' => $form->createView(),
+            'event'=>$rencontre->getEvenement()->getId()
         ]);
     }
 
@@ -93,11 +97,15 @@ class RencontreController extends AbstractController
      */
     public function delete(Request $request, Rencontre $rencontre, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$rencontre->getIdRen(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$rencontre->getId(), $request->request->get('_token'))) {
+            $event=$rencontre->getEvenement();
             $entityManager->remove($rencontre);
+            $entityManager->remove($event);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_rencontre_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_evenement_index', ['user'=> 58
+        //$this->getUser()->getId()
+        ], Response::HTTP_SEE_OTHER);
     }
 }

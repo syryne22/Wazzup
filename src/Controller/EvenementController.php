@@ -44,6 +44,11 @@ class EvenementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $evenement->setDateP(new \DateTime())
+                      ->setIdUtilisateur(
+                          $entityManager->getRepository(Utilisateurs::class)->find(58)
+                          //$this->getUser()
+                      );
             $entityManager->persist($evenement);
             $entityManager->flush(); 
             if($evenement->getTypeEvent()=="Rencontre")
@@ -82,25 +87,41 @@ class EvenementController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_evenement_index', ['user'=>58
+            //$this->getUser()->getId()
+            ], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('evenement/edit.html.twig', [
             'evenement' => $evenement,
             'form' => $form->createView(),
+            'user'=>58 // a supprimer in the future
         ]);
     }
 
     /**
-     * @Route("/{idEvent}", name="app_evenement_delete", methods={"POST"})
+     * @Route("/{evenement}/delete", name="app_evenement_delete", methods={"POST"})
      */
     public function delete(Request $request, Evenement $evenement, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$evenement->getIdEvent(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$evenement->getId(), $request->request->get('_token'))) {
+            $salles=$entityManager->getRepository(SalleCinema::class)->findBy(['ID_Event'=> $evenement->getId()]);
+            $rencontres=$entityManager->getRepository(Rencontre::class)->findBy(['ID_Event'=> $evenement->getId()]);
+            foreach ($salles as $salle) {
+
+                $entityManager->remove($salle);
+                $entityManager->flush();
+            }
+            foreach ($rencontres as $rencontre){
+                $entityManager->remove($rencontre);
+                $entityManager->flush();
+            }
             $entityManager->remove($evenement);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_evenement_index', ['user'=>58
+        //$this->getUser()->getId()
+        ], Response::HTTP_SEE_OTHER);
     }
 }

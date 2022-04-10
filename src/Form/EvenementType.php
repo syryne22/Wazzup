@@ -38,8 +38,8 @@ class EvenementType extends AbstractType
                 ]
             ])
             ->add('description')
-            ->add('dateP',DateTimeType::class)
-            ->add('idUtilisateur',EntityType::class,['class'=>Utilisateurs::class,'choice_label'=>'nom'])
+//            ->add('dateP',DateTimeType::class)
+//            ->add('idUtilisateur',EntityType::class,['class'=>Utilisateurs::class,'choice_label'=>'nom'])
         ;
     }
 
