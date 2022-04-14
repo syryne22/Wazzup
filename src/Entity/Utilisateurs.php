@@ -1,18 +1,35 @@
 <?php
 
 namespace App\Entity;
-use App\Repository\UtilisateursRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM;
 
+use Serializable;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Repository\UtilisateursRepository;
 /**
  * Utilisateurs
  *
  * @ORM\Table(name="utilisateurs")
- * @ORM\Entity(repositoryClass=UtilisateursRepository::class)
- */
-class Utilisateurs
+ * @UniqueEntity(
+ *     fields={"email"},
+ *     groups={"registration"},
+ *     message="Votre email est déja utilisé"
+ * )
+ * @ORM\Entity(repositoryClass="App\Repository\UtilisateursRepository")
+ 
+* @UniqueEntity(
+    *     fields={"email"},
+    *     groups={"forgotpassword"},
+    *     message="Email trouvé"
+    * )
+    * @ORM\Entity(repositoryClass="App\Repository\UtilisateursRepository")
+    */
+
+class Utilisateurs implements UserInterface
 {
     /**
      * @var int
@@ -24,37 +41,40 @@ class Utilisateurs
     private $idUtilisateur;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="nom", type="string", length=30, nullable=false)
+     * @ORM\Column(name="nom", type="string", length=30)
+     * @Assert\NotBlank(message="Veuillez insérer votre nom")
      */
     private $nom;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="prenom", type="string", length=30, nullable=false)
-     */
+     * @ORM\Column(name="prenom", type="string", length=30)
+     * @Assert\NotBlank(message="Veuillez insérer votre prenom")     */
     private $prenom;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="datenaissance", type="string", length=30, nullable=false)
+     * @ORM\Column(name="datenaissance", type="string", length=30, nullable=true)
+     * @Assert\NotBlank(message="Veuillez insérer votre date de naissance ")
      */
     private $datenaissance;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="genre", type="string", length=0, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="genre", type="string", length=0, nullable=true)
      */
-    private $genre = 'NULL';
+    private $genre;
 
     /**
      * @var string
      *
      * @ORM\Column(name="num_tel", type="string", length=12, nullable=false)
+     * @Assert\NotBlank(message="Veuillez insérer votre numero de telephone ")
      */
     private $numTel;
 
@@ -62,64 +82,78 @@ class Utilisateurs
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=50, nullable=false)
+     * @Assert\NotBlank(message="Veuillez insérer votre email ")
+     * @Assert\Email(
+     *     message = "Votre email '{{ value }}' n'est pas un email valide."
+     * )
      */
     private $email;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="avatar", type="string", length=200, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="avatar", type="string", length=200, nullable=true)
      */
-    private $avatar = 'NULL';
+    private $avatar;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mdp", type="string", length=220, nullable=false)
+     * @ORM\Column(name="mdp", type="string", length=220, nullable=false)-
+     * @Assert\NotBlank(message="Veuillez insérer votre mot de passe ")
+     * @Assert\NotCompromisedPassword(message="Veuillez choisir un mot de passe plus fort")
+     * @Assert\Regex(pattern="/^(?=.*[a-z])(?=.*\d).{6,}$/i", message="Votre mot de passe doit comporter au moins 6 caractères et inclure au moins une lettre et un chiffre.")
+     * @Assert\EqualTo(propertyPath="mdpconfirm",message="Votre mot de passe ne correspond pas a votre confirmation")
+     *
      */
     private $mdp;
+    /**
+     * @Assert\EqualTo(propertyPath="mdpconfirm",message="Votre mot de passe doit etre le meme que le mot de passe saisie précedement")
+     */
+
+    public $mdpconfirm;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type_user", type="string", length=0, nullable=false, options={"default"="'User'"})
+     * @ORM\Column(name="type_user", type="string", length=0, nullable=false, options={"default"="User"})
      */
-    private $typeUser = '\'User\'';
+    private $typeUser = 'User';
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="passwordRequestedAt", type="date", nullable=true)
+     * @ORM\Column(name="passwordRequestedAt", type="datetime", nullable=true)
      */
-    private $passwordrequestedat = 'NULL';
+    private $passwordrequestedat;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Token", type="string", length=200, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="Token", type="string", length=200, nullable=true)
      */
-    private $token = 'NULL';
+    private $token;
 
     /**
      * @var bool
      *
      * @ORM\Column(name="activated", type="boolean", nullable=false)
      */
-    private $activated;
+    private $activated = 'false';
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="nbsignal", type="integer", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="nbsignal", type="integer", nullable=true)
      */
-    private $nbsignal = NULL;
+    private $nbsignal;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="evaluation", type="integer", nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="evaluation", type="integer", nullable=true)
      */
-    private $evaluation = NULL;
+    private $evaluation;
 
     /**
      * @var bool|null
@@ -136,20 +170,33 @@ class Utilisateurs
     private $desactivated = '0';
 
     /**
-     * @var \DateTime
      *
-     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
+     * @ORM\Column(name="creation_date", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @var \DateTime|null
      */
-    private $creationDate = 'current_timestamp()';
+    private $creationDate = 'new \DateTime()';
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="SalleCollaboration", mappedBy="idUtlisateur")
+     */
+    private $idCollab;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        
+        $this->creationDate = new \DateTime();
+        $this->idCollab = new \Doctrine\Common\Collections\ArrayCollection();
     }
+    public function setIdUtilisateur(?int $idUtilisateur): self
+    {
+        $this->idUtilisateur = $idUtilisateur;
 
+        return $this;
+    }
     public function getIdUtilisateur(): ?int
     {
         return $this->idUtilisateur;
@@ -184,9 +231,11 @@ class Utilisateurs
         return $this->datenaissance;
     }
 
-    public function setDatenaissance(string $datenaissance): self
+    public function setDatenaissance(object $datenaissance = null): self
     {
-        $this->datenaissance = $datenaissance;
+        if (!($datenaissance == null)) {
+            $this->datenaissance = $datenaissance->format('d-m-Y');
+        }
 
         return $this;
     }
@@ -263,13 +312,14 @@ class Utilisateurs
         return $this;
     }
 
-    public function getPasswordrequestedat() 
+    public function getPasswordrequestedat(): ?\DateTimeInterface
     {
         return $this->passwordrequestedat;
     }
 
-    public function setPasswordrequestedat($passwordrequestedat): self
-    {
+    public function setPasswordrequestedat(
+        ?\DateTimeInterface $passwordrequestedat
+    ): self {
         $this->passwordrequestedat = $passwordrequestedat;
 
         return $this;
@@ -359,6 +409,46 @@ class Utilisateurs
         return $this;
     }
 
+    /**
+     * @return Collection<int, SalleCollaboration>
+     */
+    public function getIdCollab(): Collection
+    {
+        return $this->idCollab;
+    }
 
+    public function addIdCollab(SalleCollaboration $idCollab): self
+    {
+        if (!$this->idCollab->contains($idCollab)) {
+            $this->idCollab[] = $idCollab;
+            $idCollab->addIdUtlisateur($this);
+        }
 
+        return $this;
+    }
+
+    public function removeIdCollab(SalleCollaboration $idCollab): self
+    {
+        if ($this->idCollab->removeElement($idCollab)) {
+            $idCollab->removeIdUtlisateur($this);
+        }
+
+        return $this;
+    }
+    public function eraseCredentials()
+    {
+    }
+    public function getSalt()
+    {
+    }
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+    public function getPassword()
+    {
+    }
+    public function getUsername()
+    {
+    }
 }
