@@ -1,4 +1,12 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'novalidate': 'novalidate','style':'font-family: cursive;'}}) }}
+{{form_row(form.nomEvent,{'label': 'Nom de l\'événement','attr': {'class': 'form-control','style':'font-family: cursive;','placeholder':'Nom de l\'événement'}})}}
+{{form_row(form.nbrParticipants,{'label': 'Nombre de participants','attr': {'class': 'form-control','style':'font-family: cursive;','placeholder':'Nombre participants'}})}}
+{{form_row(form.dateEvent,{'label': 'Date de l\'événement','attr': {'class': 'form-control datepicker','autocomplete':'off','data-date-format':"dd/mm/yyyy",'style':'font-family: cursive;','placeholder':'Date evenement'}})}}
+{{form_row(form.typeEvent,{'label': 'Type de l\'événement','attr': {'class': 'form-control','style':'font-family: cursive;','placeholder':'Type événement'}})}}
+{{form_row(form.eventVisibilite,{'label': 'Visibilité de l\'événement','attr': {'class': 'form-control','style':'font-family: cursive;','placeholder':'Visibilité événement'}})}}
+{{form_row(form.description,{'label': 'Description','attr': {'class': 'form-control','style':'font-family: cursive;','placeholder':'Description...'}})}}
+<br>
+    <center>
+        {{form_widget(form.Enregistrer)}}
+
 {{ form_end(form) }}

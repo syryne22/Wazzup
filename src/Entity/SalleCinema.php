@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SalleCinemaRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * SalleCinema
  *
@@ -25,6 +27,8 @@ class SalleCinema
      * @var string
      *
      * @ORM\Column(name="Nom_Salle", type="string", length=50, nullable=false)
+     *@Assert\NotBlank(message="Veuillez ajouter le nom de la salle")
+
      */
     private $nomSalle;
 

@@ -1,4 +1,3 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_start(form, {'attr': {'novalidate': 'novalidate','style':'font-family: cursive;'}}) }}
+ {{form_row(form.nomSalle,{'label': 'Nom de la SalleCinéma','attr': {'class': 'form-control','placeholder':'Nom SalleCinéma'}})}}
 {{ form_end(form) }}

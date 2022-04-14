@@ -1,28 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Evenement index{% endblock %}
+{% block title %}Vos événements{% endblock %}
 
 {% block body %}
-    <h1>Evenement index</h1>
-
-    <table class="table" border="1">
-        <thead>
+    <center>
+    <h1 style="font-family: cursive;">Vos événements</h1>
+    </center>
+    <table class="table" border="1" style="font-family: cursive;">
+        <thead style="color: teal">
             <tr>
-                <th>IdEvent</th>
-                <th>NomEvent</th>
-                <th>NbrParticipants</th>
-                <th>DateEvent</th>
-                <th>TypeEvent</th>
-                <th>EventVisibilite</th>
+                <th>Nom événement</th>
+                <th>Nombre participants</th>
+                <th>Date événement</th>
+                <th>Type événement</th>
+                <th>Visibilité</th>
                 <th>Description</th>
-                <th>DateP</th>
-                <th>actions</th>
+                <th>Date de création</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for evenement in evenements %}
             <tr>
-                <td>{{ evenement.id }}</td>
                 <td>{{ evenement.nomEvent }}</td>
                 <td>{{ evenement.nbrParticipants }}</td>
                 <td>{{ evenement.dateEvent }}</td>
@@ -31,22 +30,23 @@
                 <td>{{ evenement.description }}</td>
                 <td>{{ evenement.dateP ? evenement.dateP|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_evenement_show', {'id': evenement.id}) }}">show</a>
-                    <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}">edit</a>
+                    <a href="{{ path('app_evenement_show', {'id': evenement.id}) }}"class="btn btn-primary" style="background-color: teal">Afficher </a>
+                    <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}"class="btn btn-outline-info">Modifier </a>
                     {% if (evenement.typeEvent=='SalleCinema') %}
-                    <a href="{{ path('app_salle_cinema_index',{'event': evenement.id}) }}">Show Salle Cinema</a>
+                    <a href="{{ path('app_salle_cinema_index',{'event': evenement.id}) }}"class="btn btn-outline-primary" >Afficher Salle Cinema</a>
                     {% else %}
-                    <a href="{{ path('app_rencontre_index',{'event': evenement.id}) }}">Show Rencontre</a>
+                    <a href="{{ path('app_rencontre_index',{'event': evenement.id}) }}"class="btn btn-outline-primary">Afficher Rencontre</a>
                     {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="9">no records found</td>
+                <td colspan="9">Aucun événement trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_evenement_new') }}">Create new</a>
+<center>
+    <a href="{{ path('app_evenement_new') }}" class="btn btn-success btn-primary" style="background-color: teal;font-family: cursive;">Créer un nouvel événement</a>
+</center>
 {% endblock %}

@@ -3,7 +3,7 @@
 namespace App\Entity; 
 use App\Repository\RencontreRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Rencontre
  *
@@ -23,6 +23,7 @@ class Rencontre
      * @var string
      *
      * @ORM\Column(name="Type_Rencontre", type="string", length=0, nullable=false)
+     * @Assert\NotBlank(message="Veuillez ajouter le Type de la rencontre")
      */
     private $typeRencontre;
 

@@ -1,33 +1,31 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Rencontre index{% endblock %}
+{% block title %}Vos Rencontres{% endblock %}
 
 {% block body %}
-    <h1>Rencontre index</h1>
+    <center><h1 style="font-family: cursive;">Vos Rencontres</h1></center>
 
     <table class="table">
-        <thead>
+        <thead style="color: teal">
             <tr>
-                <th>IdRen</th>
                 <th>TypeRencontre</th>
                 <th>UrlInvitation</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for rencontre in rencontres %}
             <tr>
-                <td>{{ rencontre.id }}</td>
                 <td>{{ rencontre.typeRencontre }}</td>
                 <td>{{ rencontre.urlInvitation }}</td>
                 <td>
-                    <a href="{{ path('app_rencontre_show', {'id': rencontre.id}) }}">show</a>
-                    <a href="{{ path('app_rencontre_edit', {'id': rencontre.id}) }}">edit</a>
+                    <a href="{{ path('app_rencontre_show', {'id': rencontre.id}) }}"class="btn btn-primary" style="background-color: teal">Afficher</a>
+                    <a href="{{ path('app_rencontre_edit', {'id': rencontre.id}) }}"class="btn btn-outline-info">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="4">Aucune Rencontre trouvé</td>
             </tr>
         {% endfor %}
         </tbody>

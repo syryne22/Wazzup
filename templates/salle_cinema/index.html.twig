@@ -1,14 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SalleCinema index{% endblock %}
+{% block title %}Vos Salles Cinéma{% endblock %}
 
 {% block body %}
-    <h1>SalleCinema index</h1>
+ <center><h1 style="font-family: cursive;">Vos Salles Cinéma</h1></center>
 
-    <table class="table">
-        <thead>
+    <table class="table" style="font-family: cursive;">
+        <thead style="color: teal">
             <tr>
-                <th>IdSalle</th>
                 <th>NomSalle</th>
                 <th>UrlFilm</th>
                 <th>UrlSalle</th>
@@ -19,19 +18,18 @@
         <tbody>
         {% for salle_cinema in salle_cinemas %}
             <tr>
-                <td>{{ salle_cinema.idSalle }}</td>
                 <td>{{ salle_cinema.nomSalle }}</td>
                 <td>{{ salle_cinema.urlFilm }}</td>
                 <td>{{ salle_cinema.urlSalle }}</td>
                 <td>{{ salle_cinema.chat }}</td>
                 <td>
-                    <a href="{{ path('app_salle_cinema_show', {'idSalle': salle_cinema.idSalle}) }}">show</a>
-                    <a href="{{ path('app_salle_cinema_edit', {'idSalle': salle_cinema.idSalle}) }}">edit</a>
+                    <a href="{{ path('app_salle_cinema_show', {'idSalle': salle_cinema.idSalle}) }}"class="btn btn-primary" style="background-color: teal;font-family: cursive;">Afficher</a>
+                    <a href="{{ path('app_salle_cinema_edit', {'idSalle': salle_cinema.idSalle}) }}"class="btn btn-outline-info" style="font-family: cursive;">Modifier</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">Aucune Salle trouvé</td>
             </tr>
         {% endfor %}
         </tbody>
